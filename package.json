@@ -1,0 +1,19 @@
+{
+  "name": "cw4s",
+  "version": "1.0.0",
+  "description": "CW4S Portfolio",
+  "main": "index.js",
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/himu62/cw4s-portfolio.git"
+  },
+  "keywords": ["portfolio"],
+  "author": "himu62",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/himu62/cw4s-portfolio/issues"
+  },
+  "homepage": "https://github.com/himu62/cw4s-portfolio#readme"
+}
