@@ -13574,6 +13574,21 @@ var Layout;
     Layout.openDrawer = function () {
         return { type: "LAYOUT_DRAWER_OPEN" };
     };
+    Layout.closeDrawer = function () {
+        return { type: "LAYOUT_DRAWER_CLOSE" };
+    };
+    Layout.toggleDrawer = function () {
+        return { type: "LAYOUT_DRAWER_TOGGLE" };
+    };
+    Layout.dockDrawer = function () {
+        return { type: "LAYOUT_DRAWER_DOCK" };
+    };
+    Layout.undockDrawer = function () {
+        return { type: "LAYOUT_DRAWER_UNDOCK" };
+    };
+    Layout.toggleDockDrawer = function () {
+        return { type: "LAYOUT_DRAWER_DOCK_TOGGLE" };
+    };
 })(Layout || (Layout = {}));
 var initialState = {
     isDrawerOpened: false,
@@ -13588,12 +13603,12 @@ var layoutReducer = function (state, action) {
             return __assign({}, state, { isDrawerOpened: false });
         case "LAYOUT_DRAWER_TOGGLE":
             return __assign({}, state, { isDrawerOpened: !state.isDrawerOpened });
-        case "LAYOUT_DRAWER_DOCK_ENABLE":
-            return __assign({}, state, { isDrawerDocked: true });
-        case "LAYOUT_DRAWER_DOCK_DISABLE":
-            return __assign({}, state, { isDrawerDocked: false });
+        case "LAYOUT_DRAWER_DOCK":
+            return __assign({}, state, { isDrawerOpened: true, isDrawerDocked: true });
+        case "LAYOUT_DRAWER_UNDOCK":
+            return __assign({}, state, { isDrawerOpened: false, isDrawerDocked: false });
         case "LAYOUT_DRAWER_DOCK_TOGGLE":
-            return __assign({}, state, { isDrawerDocked: !state.isDrawerDocked });
+            return __assign({}, state, { isDrawerOpened: !state.isDrawerOpened, isDrawerDocked: !state.isDrawerDocked });
         default:
             return state;
     }
@@ -39666,13 +39681,15 @@ function symbolObservablePonyfill(root) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_redux__ = __webpack_require__(69);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_redux__ = __webpack_require__(166);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_material_ui_AppBar__ = __webpack_require__(286);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_material_ui_AppBar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_material_ui_AppBar__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_material_ui_Drawer__ = __webpack_require__(288);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_material_ui_Drawer___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_material_ui_Drawer__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_material_ui_MenuItem__ = __webpack_require__(297);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_material_ui_MenuItem___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_material_ui_MenuItem__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__modules_layout__ = __webpack_require__(181);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_classnames__ = __webpack_require__(437);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_classnames___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_classnames__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_material_ui_AppBar__ = __webpack_require__(286);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_material_ui_AppBar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_material_ui_AppBar__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_material_ui_Drawer__ = __webpack_require__(288);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_material_ui_Drawer___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_material_ui_Drawer__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_material_ui_MenuItem__ = __webpack_require__(297);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_material_ui_MenuItem___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_material_ui_MenuItem__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__modules_layout__ = __webpack_require__(181);
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -39685,29 +39702,51 @@ var __extends = (this && this.__extends) || function (d, b) {
 
 
 
+
 var App = (function (_super) {
     __extends(App, _super);
     function App() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        // window resize event handling
+        _this.updateDimensions = function () {
+            if (window.innerWidth > 500) {
+                _this.props.dockDrawer();
+            }
+            else {
+                _this.props.undockDrawer();
+            }
+        };
+        return _this;
     }
+    App.prototype.componentDidMount = function () {
+        window.addEventListener("resize", this.updateDimensions);
+    };
+    App.prototype.componentWillUnmount = function () {
+        window.removeEventListener("resize", this.updateDimensions);
+    };
     App.prototype.render = function () {
-        return (__WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { className: "app" },
-            __WEBPACK_IMPORTED_MODULE_0_react__["createElement"](__WEBPACK_IMPORTED_MODULE_3_material_ui_AppBar___default.a, { title: "CW4S Portfolio", onLeftIconButtonTouchTap: this.props.openDrawer }),
-            __WEBPACK_IMPORTED_MODULE_0_react__["createElement"](__WEBPACK_IMPORTED_MODULE_4_material_ui_Drawer___default.a, { open: this.props.isDrawerOpened },
-                __WEBPACK_IMPORTED_MODULE_0_react__["createElement"](__WEBPACK_IMPORTED_MODULE_5_material_ui_MenuItem___default.a, null, "hoge"),
-                __WEBPACK_IMPORTED_MODULE_0_react__["createElement"](__WEBPACK_IMPORTED_MODULE_5_material_ui_MenuItem___default.a, null, "hoge2"),
-                __WEBPACK_IMPORTED_MODULE_0_react__["createElement"](__WEBPACK_IMPORTED_MODULE_5_material_ui_MenuItem___default.a, null, "hoge3"))));
+        var classname = __WEBPACK_IMPORTED_MODULE_3_classnames___default()("app", { "drawer-docked": this.props.isDrawerDocked });
+        return (__WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { className: classname },
+            __WEBPACK_IMPORTED_MODULE_0_react__["createElement"](__WEBPACK_IMPORTED_MODULE_4_material_ui_AppBar___default.a, { title: "CW4S Portfolio", showMenuIconButton: !this.props.isDrawerDocked, onLeftIconButtonTouchTap: this.props.openDrawer }),
+            __WEBPACK_IMPORTED_MODULE_0_react__["createElement"](__WEBPACK_IMPORTED_MODULE_5_material_ui_Drawer___default.a, { open: this.props.isDrawerOpened, docked: this.props.isDrawerDocked, onRequestChange: this.props.closeDrawer },
+                __WEBPACK_IMPORTED_MODULE_0_react__["createElement"](__WEBPACK_IMPORTED_MODULE_6_material_ui_MenuItem___default.a, null, "hoge"),
+                __WEBPACK_IMPORTED_MODULE_0_react__["createElement"](__WEBPACK_IMPORTED_MODULE_6_material_ui_MenuItem___default.a, null, "hoge2"),
+                __WEBPACK_IMPORTED_MODULE_0_react__["createElement"](__WEBPACK_IMPORTED_MODULE_6_material_ui_MenuItem___default.a, null, "hoge3"))));
     };
     return App;
 }(__WEBPACK_IMPORTED_MODULE_0_react__["Component"]));
 var mapStateToProps = function (state) {
     return {
-        isDrawerOpened: state.layout.isDrawerOpened
+        isDrawerOpened: state.layout.isDrawerOpened,
+        isDrawerDocked: state.layout.isDrawerDocked
     };
 };
 var mapDispatchToProps = function (dispatch) {
     return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_redux__["c" /* bindActionCreators */])({
-        openDrawer: __WEBPACK_IMPORTED_MODULE_6__modules_layout__["a" /* Layout */].openDrawer
+        openDrawer: __WEBPACK_IMPORTED_MODULE_7__modules_layout__["a" /* Layout */].openDrawer,
+        closeDrawer: __WEBPACK_IMPORTED_MODULE_7__modules_layout__["a" /* Layout */].closeDrawer,
+        dockDrawer: __WEBPACK_IMPORTED_MODULE_7__modules_layout__["a" /* Layout */].dockDrawer,
+        undockDrawer: __WEBPACK_IMPORTED_MODULE_7__modules_layout__["a" /* Layout */].undockDrawer
     }, dispatch);
 };
 var _App = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_react_redux__["b" /* connect */])(mapStateToProps, mapDispatchToProps)(App);
@@ -39762,6 +39801,61 @@ var el = document.querySelector("#app");
 if (el) {
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_react_dom__["render"])(__WEBPACK_IMPORTED_MODULE_0_react__["createElement"](__WEBPACK_IMPORTED_MODULE_3__containers_Root__["a" /* default */], null), el);
 }
+
+
+/***/ }),
+/* 437 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+  Copyright (c) 2016 Jed Watson.
+  Licensed under the MIT License (MIT), see
+  http://jedwatson.github.io/classnames
+*/
+/* global define */
+
+(function () {
+	'use strict';
+
+	var hasOwn = {}.hasOwnProperty;
+
+	function classNames () {
+		var classes = [];
+
+		for (var i = 0; i < arguments.length; i++) {
+			var arg = arguments[i];
+			if (!arg) continue;
+
+			var argType = typeof arg;
+
+			if (argType === 'string' || argType === 'number') {
+				classes.push(arg);
+			} else if (Array.isArray(arg)) {
+				classes.push(classNames.apply(null, arg));
+			} else if (argType === 'object') {
+				for (var key in arg) {
+					if (hasOwn.call(arg, key) && arg[key]) {
+						classes.push(key);
+					}
+				}
+			}
+		}
+
+		return classes.join(' ');
+	}
+
+	if (typeof module !== 'undefined' && module.exports) {
+		module.exports = classNames;
+	} else if (true) {
+		// register as 'classnames', consistent with npm package name
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
+			return classNames;
+		}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	} else {
+		window.classNames = classNames;
+	}
+}());
 
 
 /***/ })

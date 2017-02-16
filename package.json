@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/himu62/cw4s-portfolio#readme",
   "devDependencies": {
+    "@types/classnames": "0.0.32",
     "@types/material-ui": "^0.16.51",
     "@types/node": "^7.0.5",
     "@types/react": "^15.0.9",
@@ -29,6 +30,7 @@
     "@types/react-tap-event-plugin": "0.0.30",
     "@types/redux": "^3.6.31",
     "autoprefixer": "^6.7.2",
+    "classnames": "^2.2.5",
     "css-loader": "^0.26.1",
     "extract-text-webpack-plugin": "^2.0.0-rc.3",
     "material-ui": "^0.17.0",

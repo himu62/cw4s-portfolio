@@ -15,6 +15,21 @@ export namespace Layout {
 	export const openDrawer: ActionCreator<LayoutAction> = () => {
 		return {type: "LAYOUT_DRAWER_OPEN"};
 	};
+	export const closeDrawer: ActionCreator<LayoutAction> = () => {
+		return {type: "LAYOUT_DRAWER_CLOSE"};
+	};
+	export const toggleDrawer: ActionCreator<LayoutAction> = () => {
+		return {type: "LAYOUT_DRAWER_TOGGLE"};
+	};
+	export const dockDrawer: ActionCreator<LayoutAction> = () => {
+		return {type: "LAYOUT_DRAWER_DOCK"};
+	};
+	export const undockDrawer: ActionCreator<LayoutAction> = () => {
+		return {type: "LAYOUT_DRAWER_UNDOCK"};
+	};
+	export const toggleDockDrawer: ActionCreator<LayoutAction> = () => {
+		return {type: "LAYOUT_DRAWER_DOCK_TOGGLE"};
+	};
 }
 
 
@@ -34,14 +49,14 @@ export const layoutReducer = (state: LayoutState = initialState, action: LayoutA
 		case "LAYOUT_DRAWER_TOGGLE":
 			return {...state, isDrawerOpened: !state.isDrawerOpened};
 
-		case "LAYOUT_DRAWER_DOCK_ENABLE":
-			return {...state, isDrawerDocked: true};
+		case "LAYOUT_DRAWER_DOCK":
+			return {...state, isDrawerOpened: true, isDrawerDocked: true};
 
-		case "LAYOUT_DRAWER_DOCK_DISABLE":
-			return {...state, isDrawerDocked: false};
+		case "LAYOUT_DRAWER_UNDOCK":
+			return {...state, isDrawerOpened: false, isDrawerDocked: false};
 
 		case "LAYOUT_DRAWER_DOCK_TOGGLE":
-			return {...state, isDrawerDocked: !state.isDrawerDocked};
+			return {...state, isDrawerOpened: !state.isDrawerOpened, isDrawerDocked: !state.isDrawerDocked};
 
 		default:
 			return state;
