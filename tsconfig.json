@@ -1,14 +1,14 @@
 {
-  "compilerOptions": {
-    "module": "es6",
-    "target": "es5",
-    "sourceMap": true,
-    "jsx": "react",
-    "alwaysStrict": true,
-		"noImplicitAny": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true
-  },
+	"compilerOptions": {
+		"module": "es6",
+		"target": "es5",
+		"sourceMap": true,
+		"jsx": "react",
+		"alwaysStrict": true,
+		"noImplicitAny": false,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true
+	},
 	"compileOnSave": false,
 	"filesGlob": [
 		"scripts/*",
